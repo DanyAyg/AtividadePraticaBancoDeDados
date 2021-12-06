@@ -64,12 +64,14 @@ CREATE TABLE EQUIPE( /*AQUI DEVERIA SER TIME, MAS COMO É UMA PALAVRA RESERVADA 
     id_jogador INTEGER,
     id_treinador INTEGER,
     serial_jogo INTEGER,
-    adversario_equipe CHAR(50),
+    nome_equipe_adversario CHAR(50),
     UNIQUE(nome_equipe),
+    UNIQUE (nome_equipe_adversario),
     PRIMARY KEY(nome_equipe),
     FOREIGN KEY(id_treinador) REFERENCES TREINADOR(id_treinador),
     FOREIGN KEY(id_jogador) REFERENCES JOGADOR(id_jogador),
-    FOREIGN KEY(serial_jogo) REFERENCES JOGO(serial_jogo)
+    FOREIGN KEY(serial_jogo) REFERENCES JOGO(serial_jogo),
+    FOREIGN KEY(nome_equipe_adversario) REFERENCES EQUIPE(nome_equipe)
 );
 CREATE TABLE PATROCINADOR(
 	nome_patrocinador CHAR(50),
