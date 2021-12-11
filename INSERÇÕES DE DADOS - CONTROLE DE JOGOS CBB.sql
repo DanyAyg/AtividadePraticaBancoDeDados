@@ -1,144 +1,97 @@
 /*https://github.com/DanyAyg/AtividadePraticaBancoDeDados*/
 
-/*DROP DAS TABELAS DE RELACIONAMENTOS*/
-DROP TABLE IF EXISTS DIRIGE;
-DROP TABLE IF EXISTS PATROCINA;
-DROP TABLE IF EXISTS TRANSMITE;
-DROP TABLE IF EXISTS ASSISTE;
-/*DROP DAS TABELAS DE ENTIDADES*/
-DROP TABLE IF EXISTS ORGANIZADOR;
-DROP TABLE IF EXISTS JOGO;
-DROP TABLE IF EXISTS JOGADOR;
-DROP TABLE IF EXISTS EQUIPE;
-DROP TABLE IF EXISTS ESTADIO;
-DROP TABLE IF EXISTS TREINADOR;
-DROP TABLE IF EXISTS PATROCINADOR;
-DROP TABLE IF EXISTS COBERTURA;
-DROP TABLE IF EXISTS TORCEDOR;
-DROP TABLE IF EXISTS JUIZ;
-DROP TABLE IF EXISTS FUNCIONARIO;
+/*INSERÇÕES*/
+insert into estadio (nome_estadio, cidade_estadio, capacidade_estadio) 
+values ('Panela de Pressão', 'Bauru', 2000), ('Nilson Nelson', 'Brasília', 11397), 
+('SESI','Caxias do Sul', 4500), ('ASCEB','	Brasília', 1100),
+('Wlamir Marques','São Paulo', 6500), ('Maracanãzinho','Rio de Janeiro', 11800), 
+('Centro de Formação Olímpica','Fortaleza', 17100), ('Arena Unifacisa','Campina Grande', 1200),
+('Poliesportivo Arnão','Santa Cruz do Sul', 6000), ('Arena Minas TC','Belo Horizonte', 4000);
 
-/*CREATE DAS TABELAS DE ENTIDADES*/
-CREATE TABLE ESTADIO(
-    nome_estadio CHAR(50),
-    cidade_estadio CHAR(150),
-    capacidade_estadio INTEGER,
-    PRIMARY KEY(nome_estadio)
-);
-CREATE TABLE TREINADOR(
-	id_treinador INTEGER auto_increment,
-    nome_treinador CHAR(50),
-    historico_treinador char(255),
-    UNIQUE(id_treinador),
-    PRIMARY KEY(id_treinador)
-);
-CREATE TABLE EQUIPE(
-	nome_equipe CHAR(50),
-    casa_equipe CHAR(50),
-    id_treinador INTEGER,
-    UNIQUE(nome_equipe),
-    PRIMARY KEY(nome_equipe),
-    FOREIGN KEY(id_treinador) REFERENCES TREINADOR(id_treinador),
-    FOREIGN KEY(casa_equipe) REFERENCES ESTADIO(nome_estadio)
-);
-CREATE TABLE JOGO(
-	serial_jogo INTEGER auto_increment,
-    data_jogo CHAR(50),
-    equipe1 char(50),
-    equipe2 char(50),
-    placar1 INTEGER,
-    placar2 INTEGER,
-    arrecadacao FLOAT,
-    custo FLOAT,
-    nome_estadio CHAR(50),
-    UNIQUE(serial_jogo),
-    PRIMARY KEY(serial_jogo),
-    FOREIGN KEY(nome_estadio) REFERENCES ESTADIO(nome_estadio),
-    FOREIGN KEY(equipe1) REFERENCES EQUIPE(nome_equipe),
-    FOREIGN KEY(equipe2) REFERENCES EQUIPE(nome_equipe)
-);
-CREATE TABLE JOGADOR(
-	id_jogador INTEGER auto_increment,
-    nome_jogador CHAR(50),
-    numero_jogador INTEGER,
-    altura_jogador FLOAT,
-    peso_jogador FLOAT,
-	nome_equipe CHAR(50),
-    UNIQUE(id_jogador),
-    PRIMARY KEY(id_jogador),
-    FOREIGN KEY(nome_equipe) REFERENCES EQUIPE(nome_equipe)
-);
-CREATE TABLE PATROCINADOR(
-	nome_patrocinador CHAR(50),
-    area_patrocinador CHAR(50),
-    tipo_patrocinador enum('monetario', 'apoio'),
-    PRIMARY KEY(nome_patrocinador)
-);
-CREATE TABLE COBERTURA(
-	id_cobertura INTEGER auto_increment,
-    canal_cobertura CHAR(50),
-    audiencia_cobertura FLOAT,
-    PRIMARY KEY(id_cobertura)
-);
-CREATE TABLE TORCEDOR(
-	numero_ingresso INTEGER auto_increment,
-    equipe_torcedor CHAR(150),
-    genero_torcedor ENUM('masculino','feminino','outro', 'prefiro nao dizer'),
-    PRIMARY KEY(numero_ingresso)
-);
-/*create da hierarquia*/
-CREATE TABLE FUNCIONARIO(
-	id_funcionario INTEGER auto_increment,
-    nome_funcionario CHAR(50),
-    salario_funcionario FLOAT,
-    PRIMARY KEY(id_funcionario)
-);
-CREATE TABLE JUIZ(
-	id_juiz INTEGER,
-    tipo_juiz ENUM('de quadra','de bancada'),
-	genero_juiz ENUM('masculino','feminino','outro', 'prefiro nao dizer'),
-    PRIMARY KEY(id_juiz),
-    FOREIGN KEY (id_juiz) REFERENCES FUNCIONARIO(id_funcionario) ON DELETE CASCADE
-);
-CREATE TABLE ORGANIZADOR(
-	id_organizador INTEGER,
-	setor_organizador CHAR(50),
-	responsabilidade_organizador CHAR(50),
-	serial_jogo INTEGER,
-    PRIMARY KEY(id_organizador),
-    FOREIGN KEY (id_organizador) REFERENCES FUNCIONARIO(id_funcionario) ON DELETE CASCADE,
-    FOREIGN KEY (serial_jogo) REFERENCES JOGO(serial_jogo)
-);
+insert into treinador (nome_treinador, historico_treinador)
+values ('Paulo Chupeta', 'Campeonato 2008 - Flamengo'), ('Lula Ferreira', 'Campeonato 2009 - Lobos'),
+('Hélio Rubens','Campeonato 2010 - Franca'), ('Régis Marrelli','Campeonato 2011 - São José'),
+('Lula Ferreira','Campeonato 2012 - Franca'), ('Gustavo de Conti','Campeonato 2013 - Paulistano'),
+('Dedé Barbosa','Campeonato 2014 - Limeira'), ('José Alves Neto','Campeonato 2015 - Flamengo'),
+('Léo Figueiró','Campeonato 2018 - Botafogo'), ('Guerrinha','Campeonato 2020 - Mogi');
 
+insert into equipe (nome_equipe, casa_equipe, id_treinador)
+values ('Bauru', 'Panela de Pressão', 1), ('Brasilia', 'Nilson Nelson', 2), ('Caxias do Sul', 'SESI', 3), 
+('Cerrado', 'ASCEB', 4), ('Corinthians', 'Wlamir Marques', 5), ('Flamengo', 'Maracanazinho', 6),
+('Fortaleza', 'Centro de Formação Olimpica', 7), ('Minas', 'Arena Minas TC', 8), ('Uniao', 'Poliesportivo Arnao', 9),
+('Unifacisa', 'Arena Unifacisa', 10);
 
-/*CREATE DAS TABELAS DE RELACIONAMENTOS*/
-CREATE TABLE PATROCINA(
-	nome_patrocinador CHAR(50),
-    serial_jogo INTEGER,
-    nome_equipe CHAR(50),
-    PRIMARY KEY(nome_patrocinador),
-    FOREIGN KEY (nome_patrocinador) REFERENCES PATROCINADOR(nome_patrocinador) ON DELETE CASCADE,
-    FOREIGN KEY (serial_jogo) REFERENCES JOGO(serial_jogo),
-    FOREIGN KEY (nome_equipe) REFERENCES EQUIPE(nome_equipe)
-);
-CREATE TABLE TRANSMITE(
-	id_cobertura INTEGER,
-	serial_jogo INTEGER,
-    PRIMARY KEY(id_cobertura),
-    FOREIGN KEY (id_cobertura) REFERENCES COBERTURA(id_cobertura) ON DELETE CASCADE,
-    FOREIGN KEY (serial_jogo) REFERENCES JOGO(serial_jogo)
-);
-CREATE TABLE ASSISTE(
-	numero_ingresso INTEGER,
-	serial_jogo INTEGER,
-    PRIMARY KEY(numero_ingresso, serial_jogo),
-    FOREIGN KEY (numero_ingresso) REFERENCES TORCEDOR(numero_ingresso) ON DELETE CASCADE,
-    FOREIGN KEY (serial_jogo) REFERENCES JOGO(serial_jogo)
-);
-CREATE TABLE DIRIGE(
-	id_juiz INTEGER,
-	serial_jogo INTEGER,
-    PRIMARY KEY(id_juiz, serial_jogo),
-    FOREIGN KEY (id_juiz) REFERENCES JUIZ(id_juiz) ON DELETE CASCADE,
-    FOREIGN KEY (serial_jogo) REFERENCES JOGO(serial_jogo)
-);
+insert into jogador (nome_jogador, numero_jogador, altura_jogador, peso_jogador, nome_equipe)
+values ('Kevin', 8, 1.92, 92, 'Bauru'), ('Nick', 7, 1.98, 90, 'Bauru'), ('Samuel', 20, 1.82, 85, 'Bauru'), ('Larry', 4, 1.81, 90, 'Bauru'), ('Lucas', 6, 1.87, 81, 'Bauru'),
+('Zach', 5, 1.97, 92, 'Brasilia'), ('Ronald', 11, 2.06, 105, 'Brasilia'), ('Arthur', 15, 1.97, 85, 'Brasilia'), ('Ricardo', 1, 1.85, 95, 'Brasilia'), ('Gemerson', 8, 2.05, 99, 'Brasilia'),
+('Paixao', 0, 2.01, 92, 'Caxias do Sul'), ('Martini', 1, 1.95, 95, 'Caxias do Sul'), ('Caue', 8, 1.92, 80, 'Caxias do Sul'), ('Pedro', 9, 1.96, 92, 'Caxias do Sul'), ('Marco', 10, 1.87, 85, 'Caxias do Sul'),
+('Thornton', 0, 1.94, 100, 'Cerrado'), ('Joao Marcos', 1, 1.91, 90, 'Cerrado'), ('Pierotti', 4, 1.85, 81, 'Cerrado'), ('Paulo', 7, 1.93, 91, 'Cerrado'), ('Ruan', 8, 2.03, 95, 'Cerrado'),
+('Jean', 0, 1.79, 70, 'Corinthians'), ('Fuller', 2, 1.85, 82, 'Corinthians'), ('Beto', 4, 1.88, 90, 'Corinthians'), ('Djalo', 7, 1.99, 96, 'Corinthians'), ('Dalaqua', 8, 1.82, 100, 'Corinthians');
+
+insert into jogo (data_jogo, equipe1, equipe2, placar1, placar2, arrecadacao, custo, nome_estadio)
+values('10/05/2020', 'Bauru', 'Brasilia', 100, 80, 10000, 8000, 'Panela de Pressão'),
+('20/05/2020', 'Bauru', 'Caxias do Sul', 75, 99, 25000, 30000, 'SESI'),
+('08/06/2020', 'Bauru', 'Cerrado', 80, 80, 15000, 6000, 'Panela de Pressão'),
+('10/05/2020', 'Bauru', 'Corinthians', 120, 80, 30000, 45000, 'Wlamir MArques'),
+('10/06/2020', 'Brasilia', 'Caxias do Sul', 75, 82, 10000, 8000, 'Nilson Nelson'),
+('15/06/2020', 'Brasilia', 'Cerrado', 99, 98, 21000, 8000, 'Nilson Nelson'),
+('30/06/2020', 'Brasilia', 'Corinthians', 100, 121, 50000, 12000, 'Wlamir MArques'),
+('25/07/2020', 'Caxias do Sul', 'Cerrado', 50, 35, 4000, 4200, 'SESI'),
+('25/07/2020', 'Caxias do Sul', 'Corinthians', 72, 100, 8000, 7500, 'SESI'),
+('25/07/2020', 'Cerrado', 'Corinthians', 74, 74, 10000, 2500, 'ASCEB');
+
+insert into patrocinador (nome_patrocinador, area_patrocinador, tipo_patrocinador)
+values ('Budweiser', 'Alimenticio', 1), ('SKY', 'Entreterimento', 1), ('Penalty', 'Materiais Esportivos', 2),
+('ESPN', 'Entreterimento', 1), ('Betmotion', 'Apostas', 1), ('Nike', 'Materiais Esportivos', 2), 
+('Spalding', 'Materiais Esportivos', 2), ('Cultura', 'Entreterimento', 1), ('Jogo limpo', 'Suporte', 2),
+('Facebook', 'Entreterimento', 1);
+
+insert into cobertura (canal_cobertura, audiencia_cobertura)
+values ('ESPN', 9.5), ('SportTV', 7), ('NBB league Pass', 9.9), ('Vivo NBB', 4.3), ('Band', 5.5), 
+('Fox Sports', 7.8), ('YouTube', 9.1), ('Facebook', 8), ('TV Cultura', 4.1), ('TNT', 5);
+
+insert into torcedor(equipe_torcedor, genero_torcedor)
+values ('Bauru', 1), ('Bauru', 2), 
+('Basilia', 2), ('Brasilia', 1), 
+('Caxias do Sul', 3), ('Caxias do Sul', 3), 
+('Cerrado', 1), ('Cerrado', 2), 
+('Corinthians', 4), ('Corinthians', 1);
+
+insert into funcionario(nome_funcionario, salario_funcionario)
+values ('Natalia Camarinho', 3000), ('Maryam Veleda', 3000), ('Leandro Moreno', 3000), ('Cristian Moreno', 3000), ('Tamára Bencatel', 3000), 
+('Henzo Faia Carvalhosa', 2500), ('Vanessa Rabelo', 2500), ('Matteo Calheiros Valério', 2500), ('Louisa Alvarenga Marques', 2500), ('Laurindo Fitas', 2500),
+('Andra Mangueira', 1900), ('Mel Poças', 2100), ('Youssef Colares', 2100), ('Wilson Salvado Cardim', 1600), ('Alan Montenegro', 1900), 
+('Tiago Veleda', 1200), ('Oumou Meira', 2500), ('Lucca Catela', 1900), ('Viktoriya Marmou Rua', 2100), ('Kimi Lagoa', 2000);
+
+insert into juiz (id_juiz, tipo_juiz, genero_juiz)
+values (1, 1, 2), (2, 1, 2), (3, 1, 1), (4, 1, 1), (5, 1, 2), 
+(6, 2, 1), (7, 2, 2), (8, 2, 1), (9, 2, 2), (10, 2, 1);
+
+insert into organizador (id_organizador, setor_organizador, responsabilidade_organizador, serial_jogo)
+values (11, 'Limpeza', 'Quadra', 1), (12, 'Segurança', 'Portaria', 1), 
+(13, 'Limpeza', 'Vestiario', 2), (14, 'Segurança', 'Estádio', 2), 
+(15,'Segurança', 'Portaria', 3), (16, 'Limpeza', 'Quadra', 3), 
+(17, 'Limpeza', 'Vestiario', 4), (18, 'Segurança', 'Portaria', 4), 
+(19, 'Limpeza', 'Quadra', 5), (20, 'Limpeza', 'Vestiario', 5);
+
+insert into patrocina (nome_patrocinador, serial_jogo, nome_equipe)
+values ('Betmotion', 1, 'Bauru'), ('Budweiser', 2, 'Bauru'), ('Cultura', 2, 'Brasilia'), 
+('ESPN', 3, 'Caxias do Sul'), ('Facebook', 3, 'Bauru'), ('Jogo limpo', 4, 'Corinthians'), 
+('Nike', 4, 'Bauru'), ('Penalty', 5, 'Brasilia'), ('SKY', 6, 'Cerrado'), 
+('Spalding', 7, 'Brasilia');
+
+insert into transmite (id_cobertura, serial_jogo)
+values (1, 1), (2, 1), (3, 2), (4, 2), (5, 2), 
+(6, 5), (7, 9), (8, 4), (9, 3), (10, 3);
+
+insert into dirige(id_juiz, serial_jogo)
+values (1, 1), (4, 1), (9, 1),
+(2, 2), (5, 2), (9, 2),
+(3, 8), (6, 8), (6, 4),
+(8, 4);
+
+insert into assiste(numero_ingresso, serial_jogo)
+values (1, 1), (1, 4), (1, 9), 
+(2, 1), (4, 5), (10, 10), 
+(6, 4), (8, 10), (4, 1), 
+(5, 7), (4, 8), (10, 4), (5, 5);
